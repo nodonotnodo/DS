@@ -19,6 +19,12 @@ BinaryTree *AcquireBinaryTree(datatype arr[], int size, int* usesize);
 //利用递归实现二叉树的前序遍历以及打印
 void PrintBinaryTreeInVLR(BinaryTree *root);
 
+//利用递归实现二叉树的中序遍历以及打印
+void PrintBinaryTreeInLVR(BinaryTree *root);
+
+//利用递归实现二叉树的中序遍历以及打印
+void PrintBiaryTreeInLRV(BinaryTree *root);
+
 //求一个二叉树有多少节点。
 int GetNodeSizeOfBinaryTree(BinaryTree *root);
 

@@ -37,6 +37,42 @@ void PrintBinaryTreeInVLR(BinaryTree *root)
 	PrintBinaryTreeInVLR(root->right);
 }
 
+//利用递归实现二叉树的中序遍历以及打印
+void PrintBinaryTreeInLVR(BinaryTree *root)
+{
+	/*
+	递归思路：
+		先打印左子树，在打印根，最后打印右子树。
+
+		特殊情况的考虑：
+				1.空树：return-----需要特殊处理；
+				2.一个节点的树：打印根节点数据；
+				3.只有左子树且左子树只有一个节点；
+			    4.只有右子树且右子树只有一个节点；
+				5.正常情况下的树
+	*/
+
+	if (NULL == root){
+		return;
+	}
+
+	PrintBinaryTreeInLVR(root->left);
+	printf("%-4d", root->data);
+	PrintBinaryTreeInLVR(root->right);
+}
+
+//利用递归实现二叉树的中序遍历以及打印
+void PrintBiaryTreeInLRV(BinaryTree *root)
+{
+	if (NULL == root){
+		return;
+	}
+
+	PrintBiaryTreeInLRV(root->left);
+	PrintBiaryTreeInLRV(root->right);
+	printf("%-4d", root->data);
+}
+
 //求一个二叉树有多少节点。
 int GetNodeSizeOfBinaryTree(BinaryTree *root)
 {

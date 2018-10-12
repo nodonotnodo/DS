@@ -6,7 +6,14 @@ int main()
 	int size = sizeof(arr) / sizeof(arr[0]);
 	int usesize = 0;
 	BinaryTree *root = AcquireBinaryTree(arr, size, &usesize);
+	printf("这个二叉树的前序遍历结果为：");
 	PrintBinaryTreeInVLR(root);
+	printf("\n");
+	printf("这个二叉树的中序遍历结果为：");
+	PrintBinaryTreeInLVR(root);
+	printf("\n");
+	printf("这个二叉树的后序遍历结果为：");
+	PrintBiaryTreeInLRV(root);
 	printf("\n");
 	printf("这个二叉树的节点个数为:%d\n", GetNodeSizeOfBinaryTree(root));
 	printf("这个二叉树的叶子节点个数为:%d\n", GetLeafNodeSizeOfBinaryTree(root));
