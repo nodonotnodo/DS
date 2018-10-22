@@ -37,6 +37,29 @@ void PrintBinaryTreeInVLR(BinaryTree *root)
 	PrintBinaryTreeInVLR(root->right);
 }
 
+//利用非递归实现二叉树的前序遍历以及打印
+void NORecursionPrintBinaryTreeInVLR(BinaryTree *root)
+{
+	//定义一个简单的栈
+	BinaryTree *stack[10] = {0};
+	int size = 0;
+
+	while (!((size <= 0)&&(root == NULL))){
+		//每次将节点数据打印，并将节点地址存入栈中。
+		if (root == NULL){
+			root = stack[size - 1]->right;
+			size--;
+			continue;
+		}
+		printf("%-4d", root->data);
+		stack[size] = root;
+		size++;
+
+		//开始遍历root的左子树
+		root = root->left;
+	}	
+}
+
 //利用递归实现二叉树的中序遍历以及打印
 void PrintBinaryTreeInLVR(BinaryTree *root)
 {
@@ -61,7 +84,34 @@ void PrintBinaryTreeInLVR(BinaryTree *root)
 	PrintBinaryTreeInLVR(root->right);
 }
 
-//利用递归实现二叉树的中序遍历以及打印
+//利用非递归实现二叉树的中序遍历以及打印
+void NORecursionPrintBinaryTreeInLVR(BinaryTree *root)
+{
+	//定义一个简单栈。
+	BinaryTree *stack[10] = { 0 };
+	int size = 0;
+
+	while (!((root == NULL) && (size == 0))){
+		
+		//root为空，两种情况：1.左子树为空，打印栈顶元素数据，并开始遍历右子树
+		//					 2.右子树为空，打印栈顶元素数据，并开始遍历右子树
+		if (root == NULL){
+			printf("%-4d", stack[size - 1]->data);
+			root = stack[size - 1]->right;
+			size--;
+			continue;
+		}
+
+		//将这个节点地址入栈。
+		stack[size] = root;
+		size++;
+
+		//开始遍历左子树
+		root = root->left;
+	}
+}
+
+//利用递归实现二叉树的后序遍历以及打印
 void PrintBiaryTreeInLRV(BinaryTree *root)
 {
 	if (NULL == root){
@@ -71,6 +121,31 @@ void PrintBiaryTreeInLRV(BinaryTree *root)
 	PrintBiaryTreeInLRV(root->left);
 	PrintBiaryTreeInLRV(root->right);
 	printf("%-4d", root->data);
+}
+
+//利用非递归实现二叉树的后序遍历以及打印
+void NORecursionPrintBinaryTreeInLRV(BinaryTree *root)
+{
+	//实现一个简单栈。
+	BinaryTree *stack[10] = { 0 };
+	int size = 0;
+	BinaryTree *last = NULL;
+	while (!((root == NULL) && (size == 0))){
+		//先遍历左子树
+		while (root != NULL){
+			stack[size] = root;
+			size++;
+			root = root->left;
+		}
+		if ((stack[size-1]->right == NULL)||(stack[size-1]->right == last)){
+			printf("%-4d", stack[size-1]->data);
+			last = stack[size-1];
+			size--;
+		}
+		else{
+			root = stack[size - 1]->right;
+		}
+	}
 }
 
 //求一个二叉树有多少节点。
@@ -170,6 +245,23 @@ int GetHeightOfBinaryTree(BinaryTree *root)
 	return 1 + max;
 }
 
+//二叉树的镜像
+void ImageBinaryTree(BinaryTree *root)
+{
+	/*
+	递归考虑：
+			根节点镜像，左子树与右子树互换。但是子树也需要镜像。
+	*/
+	if (root == NULL){
+		return;
+	}
+	BinaryTree *tmp = root->left;
+	root->left = root->right;
+	root->right = tmp;
+	ImageBinaryTree(root->left);
+	ImageBinaryTree(root->right);
+}
+
 //查找节点，要求查找顺序为：VLR
 BinaryTree *FindNodeDate(BinaryTree *root, datatype data)
 {
@@ -225,6 +317,192 @@ void ISCompleteBinaryTree(BinaryTree *root, queue *queue)
 		queue->front += 1;
 	}
 	printf("这个二叉树是完全二叉树\n");
+}
+
+//得到寻找节点的路径
+BinaryTree ** GetWayForFindNode(BinaryTree *root, BinaryTree *child, int *size)
+{
+	//实现一个简单栈。
+	BinaryTree *stack[10] = {0};
+	BinaryTree *last = NULL;
+	while (root != child){
+		//先遍历左子树
+		while (root != NULL){
+			if (root == child){
+				return stack;
+			}
+			stack[(*size)] = root;
+			(*size)++;
+			if (root == child){
+				return stack[10];
+			}
+			root = root->left;
+		}
+		if ((stack[(*size) - 1]->right == NULL) || (stack[(*size) - 1]->right == last)){
+			last = stack[(*size) - 1];
+			(*size)--;
+		}
+		else{
+			root = stack[(*size) - 1]->right;
+		}
+	}
+	return stack;
+}
+
+//求两个节点的左近公共祖先节点(在同一颗树里)
+BinaryTree *FindPublicParentNodeForTwoNode(BinaryTree *root, BinaryTree *child1, BinaryTree *child2)
+{
+	//child1的路径。
+	int size1 = 0;
+	BinaryTree *stack1[10] = { 0 };
+	BinaryTree **stack3 = GetWayForFindNode(root, child1, &size1);
+	for (int i = 0; i < size1; i++){
+		stack1[i] = *(stack3++);
+	}
+
+	//child2的路径。
+	int size2 = 0;
+	BinaryTree *stack2[10] = { 0 };
+	BinaryTree **stack4 = GetWayForFindNode(root, child2, &size2);
+	for (int i = 0; i < size2; i++){
+		stack2[i] = *(stack4++);
+	}
+
+	//知道了child1和child2的路径后，我们就可以找到它们的公共祖先节点了。
+	if (size1 > size2){
+		while (size2 >= 0){
+			--size2;
+			if (stack1[size2] == stack2[size2]){
+				return stack1[size2];
+			}
+		}
+	}
+	else{
+		while (size1 >= 0){
+			--size1;
+			if (stack1[size1] == stack2[size1]){
+				return stack1[size1];
+			}
+		}
+	}
+}
+
+//判断一个树是否为平衡二叉树，是返回0，不是返回-1
+int ISBlancedBinaryTree(BinaryTree *root)
+{
+	/*
+		平衡二叉树概念：左右子树高度差不超过1，并且左右子树也是平衡二叉树。
+		递归思想：得到左子树高度和右子树高度，判断是否为平衡二叉树。子树亦如此。
+	*/
+	if (root == NULL){
+		return 0;
+	}
+	int HeightOfleft = GetHeightOfBinaryTree(root->left);
+	int HeightOfright = GetHeightOfBinaryTree(root->right);
+	int differenceHeightOFleftAndright = HeightOfleft - HeightOfright;
+	if (differenceHeightOFleftAndright*differenceHeightOFleftAndright <= 1){
+		ISBlancedBinaryTree(root->left);
+		ISBlancedBinaryTree(root->right);
+	}
+	else{
+		return -1;
+	}
+}
+
+int maxnum(int a, int b, int c)
+{
+	int max = a;
+	if (max < b){
+		max = b;
+	}
+	if (max < c){
+		max = c;
+	}
+	return max;
+}
+
+//求二叉树中最远两个节点的距离。
+int GetLongest(BinaryTree *root)
+{
+	if (root == NULL){
+		return 0;
+	}
+	else if (root->left == NULL && root->right == NULL){
+		return 1;
+	}
+	else{
+		int left = GetLongest(root->left);
+		int right = GetLongest(root->right);
+		int self = GetHeightOfBinaryTree(root->left) + GetHeightOfBinaryTree(root->right);
+		return maxnum(left, right, self);
+	}
+}
+
+//给出一个二叉树的前序和中序遍历结果，重建这个二叉树
+BinaryTree *GetBinaryTreeFromVLRAndLVR(datatype *VLR, datatype *LVR, int size)
+{
+	/*
+	这个二叉树的前序遍历结果为：1   2   3   5   6   7
+	这个二叉树的中序遍历结果为：3   2   5   1   7   6
+	这个二叉树的后序遍历结果为：3   5   2   7   6   1
+
+		前序：
+		后序：
+		前序得到根节点数据，在从中序中得到左子树和右子树的前序和中序，以此递归。
+	*/
+	if (size <= 0){
+		return NULL;
+	}
+	BinaryTree *root = (BinaryTree *)malloc(sizeof(BinaryTree *));
+	root->data = VLR[0];
+	int num = 0;
+	while (num < size){
+		if (LVR[num] == root->data){
+			break;
+		}
+		num++;
+	}
+	if (1 >= size){
+		root->left = NULL;
+	} else{
+		root->left = GetBinaryTreeFromVLRAndLVR(VLR + 1, LVR, num);
+	}
+	if (1 + num >= size){
+		root->right = NULL;
+	}
+	else{
+		root->right = GetBinaryTreeFromVLRAndLVR(VLR + 1 + num, LVR + num + 1, size-1-num);
+	}
+	return root;
+}
+
+//给出一个二叉树的后序和中序遍历结果，重建这个二叉树
+BinaryTree *GetBinaryTreeFromLRVAndLVR(datatype *LRV, datatype *LVR, int size)
+{
+	/*
+	这个二叉树的前序遍历结果为：1   2   3   5   6   7
+	这个二叉树的中序遍历结果为：3   2   5   1   7   6
+	这个二叉树的后序遍历结果为：3   5   2   7   6   1
+
+	前序：
+	后序：
+	前序得到根节点数据，在从中序中得到左子树和右子树的后序和中序，以此递归。
+	*/
+	if (size <= 0){
+		return NULL;
+	}
+	BinaryTree *root = (BinaryTree *)malloc(sizeof(BinaryTree *));
+	root->data = LRV[size-1];
+	int num = 0;
+	while (num < size){
+		if (LVR[num] == root->data){
+			break;
+		}
+		num++;
+	}
+	root->left = GetBinaryTreeFromLRVAndLVR(LRV, LVR, num);
+	root->right = GetBinaryTreeFromLRVAndLVR(LRV + num, LVR + num + 1, size - 1 - num);
+	return root;
 }
 
 //队列的初始化

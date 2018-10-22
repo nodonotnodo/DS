@@ -19,11 +19,20 @@ BinaryTree *AcquireBinaryTree(datatype arr[], int size, int* usesize);
 //利用递归实现二叉树的前序遍历以及打印
 void PrintBinaryTreeInVLR(BinaryTree *root);
 
+//利用非递归实现二叉树的前序遍历以及打印
+void NORecursionPrintBinaryTreeInVLR(BinaryTree *root);
+
 //利用递归实现二叉树的中序遍历以及打印
 void PrintBinaryTreeInLVR(BinaryTree *root);
 
+//利用非递归实现二叉树的中序遍历以及打印
+void NORecursionPrintBinaryTreeInLVR(BinaryTree *root);
+
 //利用递归实现二叉树的中序遍历以及打印
 void PrintBiaryTreeInLRV(BinaryTree *root);
+
+//利用非递归实现二叉树的后序遍历以及打印
+void NORecursionPrintBinaryTreeInLRV(BinaryTree *root);
 
 //求一个二叉树有多少节点。
 int GetNodeSizeOfBinaryTree(BinaryTree *root);
@@ -40,7 +49,26 @@ int GetHeightOfBinaryTree(BinaryTree *root);
 //查找节点，要求查找顺序为：VLR
 BinaryTree *FindNodeDate(BinaryTree *root, datatype data);
 
+//二叉树的镜像
+void ImageBinaryTree(BinaryTree *root);
 
+//得到寻找节点的路径
+BinaryTree **GetWayForFindNode(BinaryTree *root, BinaryTree *child, int *size);
+
+//求两个节点的左近公共祖先节点(在同一颗树里)
+BinaryTree *FindPublicParentNodeForTwoNode(BinaryTree *root, BinaryTree *child1, BinaryTree *child2);
+
+//判断一个树是否为平衡二叉树，是返回0，不是返回-1
+int ISBlancedBinaryTree(BinaryTree *root);
+
+//求二叉树中最远两个节点的距离。
+int GetLongest(BinaryTree *root);
+
+//给出一个二叉树的前序和中序遍历结果，重建这个二叉树
+BinaryTree *GetBinaryTreeFromVLRAndLVR(datatype *VLR, datatype *LVR, int size);
+
+//给出一个二叉树的后序和中序遍历结果，重建这个二叉树
+BinaryTree *GetBinaryTreeFromLRVAndLVR(datatype *LRV, datatype *LVR, int size);
 
 //队列
 
