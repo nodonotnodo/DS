@@ -227,3 +227,56 @@ void QuickSort(datatype *data, int size)
 {
 	RealQuickSort(data, 0, size-1);
 }
+
+//归并排序
+/*
+归并排序就是将一组数据分为两组小数据，使这两组小数据有序后再进行有序合并。
+将这个思想在小数据中不断贯彻下去，直到小数据在数据个数只剩一个或为空时，开始返回。
+*/
+
+void RealMergeSort(datatype *data, int start, int end)
+{
+	if (start >= end){//小数据在数据个数只剩一个或为空
+		return;
+	}
+	int mid = start + (end - start) / 2;
+	RealMergeSort(data, start, mid);
+	RealMergeSort(data, mid+1, end);
+	datatype *newdata = (datatype *)malloc(sizeof(datatype)*(end - start + 1));
+	int leftdata = start, leftsize = mid - start + 1;
+	int rightdata = mid + 1, rightsize = end - mid;
+	int i = 0, j = 0, k = 0;
+	while (j < leftsize&&k < rightsize){
+		if (data[leftdata + j] <= data[rightdata + k]){
+			newdata[i] = data[leftdata + j];
+			i++;
+			j++;
+		}
+		else{
+			newdata[i] = data[rightdata + k];
+			i++;
+			k++;
+		}
+	}
+	if (j == leftsize){
+		for (; k < rightsize; k++){
+			newdata[i] = data[rightdata + k];
+			i++;
+		}
+	}
+	else if(k == rightsize){
+		for (; j < leftsize; j++){
+			newdata[i] = data[leftdata + j];
+			i++;
+		}
+	}
+	for (i = 0; i < end - start + 1; i++){
+		data[i+start] = newdata[i];
+	}
+	free(newdata);
+}
+
+void MergeSort(datatype *data, int size)
+{
+	RealMergeSort(data, 0, size-1);//[start,end]
+}

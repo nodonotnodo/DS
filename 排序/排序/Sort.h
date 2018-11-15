@@ -22,7 +22,7 @@ void InsertSort(datatype *data, int size);
 	我们发现，插入排序的耗时与其数据的有序程度是成反比的。
 	所以我们可以在插排之前对数据进行处理，使其有序程度增加，这就是希尔排序。
 */
-void ShellSort(datatype *data, int size);
+//void ShellSort(datatype *data, int size);
 
 //选择排序
 /*
@@ -56,5 +56,7 @@ void QuickSort(datatype *data, int size);
 
 //归并排序
 /*
-	
+	归并排序就是将一组数据分为两组小数据，使这两组小数据有序后再进行有序合并。
+	将这个思想在小数据中不断贯彻下去，直到小数据在数据个数只剩一个或为空时，开始返回。
 */
+void MergeSort(datatype *data, int size);
