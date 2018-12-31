@@ -56,7 +56,7 @@ void ShellSort(datatype *data, int size)
 			int left = i;
 			int right = insert - 3;
 			while (left < right){
-				int mid = (left/3 + (right/3 - left/3) / 2)*3+i;
+				int mid = left + (right/3 - left/3) / 2 * 3;
 				if (data[mid] <= data[insert]){
 					left = mid + 3;
 				}
